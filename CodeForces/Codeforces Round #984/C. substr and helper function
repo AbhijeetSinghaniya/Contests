@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int t;
+    cin>>t;
+    while(t--) {
+        string s;
+        cin>>s;
+        int q;
+        cin>>q;
+        vector<pair<int, int>> v;
+        for(int i=0;i<q;i++) {
+            int ind,val;
+            cin>>ind>>val;
+            v.push_back({ind - 1, val});
+        }
+        int len = s.length();
+        if(len < 4) {
+            while(q--) {
+                cout<<"NO"<<endl;
+            }
+            continue;
+        }
+
+        int cnt = 0;
+        auto isCnt = [&](int i) {
+            return i >= 0 && i + 3 < len && s.substr(i, 4) == "1100";
+        };
+
+        for (int i = 0; i < len - 3; i++) {
+            if (isCnt(i)) {
+                cnt++;
+            }
+        }
+        for(auto p : v) {
+            int ind = p.first;
+            int val = p.second;
+
+            if(s[ind] - '0' != val) {
+                for(int i=ind-3;i<=ind;i++) {
+                    if(isCnt(i)) {
+                        cnt--;
+                    }
+                }
+                s[ind] = val + '0';
+
+                for(int i = ind-3;i<=ind;i++){
+                    if(isCnt(i)) cnt++;
+                }
+            }
+            if(cnt) cout<<"YES"<<endl;
+            else cout<<"NO"<<endl;
+        }
+
+    }
+    return 0;
+}
