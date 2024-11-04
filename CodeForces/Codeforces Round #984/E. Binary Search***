@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n,k,q;
+    cin>>n>>k>>q;
+    
+    vector<vector<int>> v(n+1,vector<int> (k+1,0));  
+    for(int i=1;i<=n;i++){
+       for(int j=1;j<=k;j++) {
+           cin>>v[i][j];
+           v[i][j] |= v[i-1][j];
+       }
+    }
+    
+    while(q--) {
+        int m;
+        cin>>m;
+        
+        int flag = 1;
+        int ll = 1, rr = n;
+        while(m--) {
+            int r,c;
+            char s;
+            cin>>r>>s>>c;
+            
+            int cl = ll, cr = rr,ans = -1;
+            
+            if(s == '<' && flag) {
+                while(cl <= cr) {
+                    int mid = (cl + cr)/2;
+                    if(v[mid][r] < c) {
+                        ans = mid;
+                        cl = mid+1;
+                    }
+                    else cr = mid-1;
+                }
+                if(ans == -1) flag = 0;
+                else rr = ans;
+            }
+            else if(flag) {
+                while(cl <= cr) {
+                    int mid = (cl + cr)/2;
+                    if(v[mid][r] > c) {
+                        ans = mid;
+                        cr = mid - 1;
+                    }
+                    else cl = mid + 1;
+                }
+                if(ans == -1) flag = 0;
+                else ll = ans;
+            }
+        }
+        if(flag) {
+            cout<<ll<<endl;
+        }
+        else cout<<-1<<endl;
+    }
+}
+
+
